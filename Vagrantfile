@@ -9,7 +9,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "deploy", primary: true do |subconfig|
     subconfig.vm.hostname = "deploy"
     subconfig.vm.network :private_network, ip: "10.0.0.10"
-    subconfig.vm.network "forwarded_port", guest: 80, host: 8000, auto_correct: true
+    subconfig.vm.network "forwarded_port",
+                          guest: 80,
+                          host: 8000,
+                          auto_correct: true
+    subconfig.vm.synced_folder ".", "/var/www"
     # Specified vagrant to not run in sudo mode so rbenv is installed in the right path -> ~/ rather than /root/.
     subconfig.vm.provision "shell", privileged: false, path: "prod.sh"
     subconfig.vm.provider "virtualbox" do |vb|
